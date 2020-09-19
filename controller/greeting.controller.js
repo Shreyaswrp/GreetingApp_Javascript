@@ -1,6 +1,24 @@
+/*************************************************************
+ *
+ * Execution       : default node cmd> node greeting.controller.js
+ * Purpose         : Define actions for various http methods
+ *
+ * @description    : Actions to be done when http methods are called. 
+ *                   
+ *                               
+ * @file           : greeting.controller.js
+ * @overview       : Actions of http methods
+ * @module         : controller
+ * @version        : 1.0
+ * @since          : 16/11/2020
+ *
+ * **********************************************************/
+
 const Greeting = require('../app/models/greeting.model.js');
 
-// Create and Save a new Greeting
+/**
+ * Create and Save a new Greeting
+ */
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.content) {
@@ -26,7 +44,9 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve and return all greetings from the database.
+/**
+ * Retrieve and return all greetings from the database.
+ */
 exports.findAll = (req, res) => {
     Greeting.find()
     .then(greetings => {
@@ -38,7 +58,9 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single greeting with a greetingId
+/**
+ * Find a single greeting with a greetingId
+ */
 exports.findOne = (req, res) => {
     Greeting.findById(req.params.greetingId)
     .then(greeting => {
@@ -60,7 +82,9 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a greeting identified by the greetingId in the request
+/**
+ * Update a greeting identified by the greetingId in the request
+ */
 exports.update = (req, res) => {
 // Validate Request
 if(!req.body.content) {
@@ -69,7 +93,9 @@ if(!req.body.content) {
     });
 }
 
-// Find greeting and update it with the request body
+/**
+ * Find greeting and update it with the request body
+ */
 Greeting.findByIdAndUpdate(req.params.greetingId, {
     title: req.body.title || "Untitled Greeting",
     content: req.body.content
@@ -93,7 +119,9 @@ Greeting.findByIdAndUpdate(req.params.greetingId, {
 });
 };
 
-// Delete a greeting with the specified greetingId in the request
+/**
+ * Delete a greeting with the specified greetingId in the request
+ */
 exports.delete = (req, res) => {
     Greeting.findByIdAndRemove(req.params.greetingId)
     .then(greeting => {
