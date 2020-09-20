@@ -50,17 +50,6 @@ mongoose.connect(dbConfig.url, {
     process.exit();
 });
 
-/**
- * Define a simple route to display Message at the homepage
- */
-app.get('/msg', (req, res) => {
-    res.json({"message": "Welcome to Greeting application."});
-});
-
-app.get('/', (req, res) => {
-    res.json({"message": "Hello World!"});
-});
-
 require('./routes/greeting.route.js')(app);
 
 /**
