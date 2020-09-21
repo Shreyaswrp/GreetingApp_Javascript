@@ -39,7 +39,7 @@ require('dotenv/config');
 /**
  * listen for requests
  */
-const PORT = process.env.port || 3000;
+const PORT = process.env.port || 4000;
 app.listen( PORT, () => {
     console.log("Server is listening on port"+" " +PORT);
 });

@@ -1,9 +1,8 @@
 const GreetingMessage = require('../controller/greeting.controller.js');
+var greeting = new GreetingMessage();
 
 module.exports = (app) => {
-    const greetingMsg = require('../controller/greeting.controller.js');
-    var greeting = new greetingMsg();
-
+    
     /**
      * Define a simple route to display Message at the homepage
      */
@@ -14,20 +13,20 @@ module.exports = (app) => {
     /**
      * Define a simple route to display Message by the attributes provided
      */
-    app.get("/greetingName/:fname?/:lname?", greeting.findByName);
+    app.get("/greetingName/:firstName?/:lastName?", greeting.findGreetingByName);
 
     // Create a new Greeting
-    app.post('/greetings', greeting.create);
+    app.post('/greetings', greeting.createGreeting);
 
     // Retrieve all Greetings
-    app.get('/greetings', greeting.findAll);
+    app.get('/greetings', greeting.findAllGreetings);
 
     // Retrieve a single Greeting with greetingId
-    app.get('/greetings/:greetingId', greeting.findOne);
+    app.get('/greetings/:greetingId', greeting.findOneGreeting);
 
     // Update a Greeting with greetingId
-    app.put('/greetings/:greetingId', greeting.update);
+    app.put('/greetings/:greetingId', greeting.updateGreeting);
 
     // Delete a Greeting with greetingId
-    app.delete('/greetings/:greetingId', greeting.delete);
+    app.delete('/greetings/:greetingId', greeting.deleteGreeting);
 }
