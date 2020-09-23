@@ -4,15 +4,12 @@ const Greeting = require('../app/models/greeting.model.js');
  * @params {object} data
  * @params {callback function} callback
  */
-exports.createGreeting = (data, callback) => {
-    console.log("5555");
-    Greeting.createGreeting(data, (err, result) => {
-        console.log(result);
-        console.log(data);
+exports.createGreeting = (data,callback) => {
+    Greeting.createGreeting(data,function(err, data) {
         if (err) {
-            callback(err,null)
+            callback(err,null);
         } else {
-            callback(null, result);
+            callback(null, data);
         }
     })
 }
@@ -21,12 +18,12 @@ exports.createGreeting = (data, callback) => {
  * @params {object} data
  * @params {callback function} callback
  */
-exports.findAllGreetings = (data, callback) => {
-    Greeting.findAllGreetings(data, (err, result) => {
+exports.findAllGreetings = (data,callback) => {
+    Greeting.findAllGreetings(data,function(err, data) {
         if (err) {
-            callback(err)
+            callback(err,null);
         } else {
-            callback(null, result);
+            callback(null, data);
         }
     })
 }
@@ -52,7 +49,7 @@ exports.findGreetingByName = (data, callback) => {
 exports.findOneGreeting = (data, callback) => {
     Greeting.findOneGreeting(data, (err, result) => {
         if (err) {
-            callback(err)
+            callback(err,null)
         } else {
             callback(null, result);
         }
@@ -80,9 +77,10 @@ exports.updateGreeting = (data, callback) => {
 exports.deleteGreeting = (data, callback) => {
     Greeting.deleteGreeting(data, (err, result) => {
         if (err) {
-            callback(err)
+            callback(err,null);
         } else {
             callback(null, result);
         }
     })
 }
+
