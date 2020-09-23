@@ -9,7 +9,7 @@ exports.createGreeting = (data,callback) => {
         if (err) {
             callback(err,null);
         } else {
-            callback(null, data);
+            callback(null,data);
         }
     })
 }

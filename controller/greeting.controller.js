@@ -38,21 +38,21 @@ validateMessage = (message) => {
  */
 createGreeting = (req, res) => {
 
-        // Validate request
-        const { error } = this.validateMessage(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
-        const greetingContent = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            greeting: req.body.greeting
+    // Validate request
+    const { error } = this.validateMessage(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+    const greetingContent = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        greeting: req.body.greeting
+    }
+    greetingService.createGreeting(greetingContent, function(err, data) {
+        if (err) {
+            return callback(err,null);
+        }else{
+            res.send(data);
         }
-        greetingService.createGreeting(greetingContent, function(err, data) {
-            if (err) {
-                return callback(err,null);
-            }else{
-               res.send(data);
-            }
-        });
+    });
 }
 
 /**
@@ -121,7 +121,13 @@ updateGreeting = (req, res) => {
     if(!regexConst.test(req.params.greetingId)){
         return res.send({message: "Incorrect id.Give proper id. "});
     }
-    greetingService.updateGreeting(req.params.greetingId, function(err, result) {
+    const greetingToUpdate ={
+        id: req.params.greetingId,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        greeting: req.body.greeting
+    }
+    greetingService.updateGreeting(greetingToUpdate, function(err, result) {
         if (err) {
             return callback(err,null);
         }else{

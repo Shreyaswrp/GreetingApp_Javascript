@@ -11,22 +11,22 @@ module.exports = (app) => {
     });
     
     // Create a new Greeting
-    app.post('/greetingsCreation', greeting.createGreeting);
+    app.post('/creategreeting', greeting.createGreeting);
 
     // Retrieve all Greetings
     app.get('/findgreetings', greeting.findAllGreetings);
 
     // Retrieve a single Greeting with greetingId
-    app.get('/findgreetingById/:greetingId', greeting.findOneGreeting);
+    app.get('/findagreeting/:greetingId', greeting.findOneGreeting);
 
     /**
      * Define a simple route to display Message by the attributes provided
      */
-    app.get("/greetingName/:firstName?/:lastName?", greeting.findGreetingByName);
+    app.get("/greetingname/:firstName?/:lastName?", greeting.findGreetingByName);
 
     // Update a Greeting with greetingId
-    app.put('/greetingsEditing/:greetingId', greeting.updateGreeting);
+    app.put('/updategreeting/:greetingId', greeting.updateGreeting);
 
     // Delete a Greeting with greetingId
-    app.delete('/greetingsDeletion/:greetingId', greeting.deleteGreeting);
+    app.delete('/deletegreeting/:greetingId', greeting.deleteGreeting);
 }

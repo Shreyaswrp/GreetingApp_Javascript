@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const GreetingSchema = mongoose.Schema({
+    greeting: String,
     firstName: String,
     lastName: String,
-    greeting: String
 }, {
     timestamps: true
 });
 
-var Greeting = mongoose.model("Greeting", GreetingSchema);
+Greeting = mongoose.model("Greeting", GreetingSchema);
 
 class GreetingModel{
 
@@ -17,12 +17,12 @@ class GreetingModel{
  */
 createGreeting = (data,callback) => {
     try{
-    // Create a Greeting
     const greeting = new Greeting({
         firstName: data.firstName,
         lastName: data.lastName, 
         greeting: data.greeting
     });
+
     // Save Greeting in the database
     greeting.save()
     callback(null,greeting);
