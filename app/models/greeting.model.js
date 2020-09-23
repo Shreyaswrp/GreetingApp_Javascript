@@ -8,148 +8,97 @@ const GreetingSchema = mongoose.Schema({
     timestamps: true
 });
 
-class Greeting{
+var Greeting = mongoose.model("Greeting", GreetingSchema);
+
+class GreetingModel{
 
 /**
  * Create and Save a new Greeting
  */
 createGreeting = (data,callback) => {
-    console.log("7777");
+    try{
     // Create a Greeting
-    const greeting = new GreetingSchema({
+    const greeting = new Greeting({
         firstName: data.firstName,
         lastName: data.lastName, 
         greeting: data.greeting
     });
-    
     // Save Greeting in the database
     greeting.save()
-    .then(data => {
-        callback(null,data)
-        //res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the Greeting."
-        });
-    });
+    callback(null,greeting);
+    }catch(err){
+    callback(err,null);
+    }
 }
 
 /**
  * Retrieve and return all greetings from the database.
  */
 findAllGreetings = (data,callback) => {
-    GreetingSchema.find()
-    .then(greetings => {
-        res.send(greetings);
-        callback(null,greetings);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving greetings."
-        });
-    });
+    Greeting.find(function(err,data) {
+        if(err)return callback(err,null);
+        return callback(null,data);
+    })
 }
 
 /**
  * Find a greeting with a name
  */
 findGreetingByName = (data,callback) => {
+    try{
     let result = 0;
-    let firstName = req.body.firstName;
-    let lastName = req.body.lastName;
-    if (!lname) {
-      lname = "";
+    let firstName = data.firstName;
+    let lastName = data.lastName;
+    if (!lastName) {
+      lastName = "";
     }
-    if (!fname) {
-      fname = "";
+    if (!firstName) {
+      firstName = "";
     }
-    result = fname + " " + lname +" " +"Hello World ";
-    res.send(result);
+    result = firstName + " " + lastName +" " +"Hello World ";
     callback(null,result);
+    }catch(err){
+        callback(err,null);
+    }
 }
 
 /**
  * Find a single greeting with a greetingId
  */
 findOneGreeting = (data,callback) => {
-    GreetingSchema.findById(req.params.greetingId)
-    .then(greeting => {
-        if(!greeting) {
-            return res.status(404).send({
-                message: "Greeting not found with id " + req.params.greetingId
-            });            
-        }
-        res.send(greeting);
-        callback(null,greeting);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Greeting not found with id " + req.params.greetingId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error retrieving greeting with id " + req.params.greetingId
-        });
-    });
+    Greeting.findById(data,function(err,data){
+        if(err)return callback(err,null);
+        return callback(null,data);
+    })
 }
 
 /**
  * Update a greeting identified by the greetingId in the request
  */
 updateGreeting = (data,callback) => {
-    // Validate Request
-    if(!req.body.content) {
-        return res.status(400).send({
-            message: "Greeting content can not be empty"
-        });
-    }
-    GreetingSchema.findByIdAndUpdate(req.params.greetingId, {
-        id: req.body.title || "Untitled Greeting",
-        greeting: req.body.content
+    try{
+    Greeting.findByIdAndUpdate(data, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        greeting: data.greeting
     }, {new: true})
-    .then(greeting => {
-    if(!greeting) {
-        return res.status(404).send({
-            message: "Greeting not found with id " + req.params.greetingId
-        });
+        callback(null,data);
+    }catch(err){
+        callback(err,null);
     }
-    res.send(greeting);
-    callback(null,greeting);
-    }).catch(err => {
-    if(err.kind === 'ObjectId') {
-        return res.status(404).send({
-            message: "Greeting not found with id " + req.params.greetingId
-        });                
-    }
-    return res.status(500).send({
-        message: "Error updating greeting with id " + req.params.greetingId
-    });
-    });
 }
 
 /**
  * Delete a greeting with the specified greetingId in the request
  */
 deleteGreeting = (data,callback) => {
-    GreetingSchema.findByIdAndRemove(req.params.greetingId)
-    .then(greeting => {
-    if(!greeting) {
-        return res.status(404).send({
-            message: "Greeting not found with id " + req.params.greetingId
-        });
-    }
-    res.send({message: "Greeting deleted successfully!"});
+    try{
+    Greeting.findByIdAndRemove(data)
     callback(null,"Greeting deleted successfully!")
-    }).catch(err => {
-    if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-        return res.status(404).send({
-            message: "Greeting not found with id " + req.params.greetingId
-        });                
+    }catch(err){
+        callback(err,null);
     }
-    return res.status(500).send({
-        message: "Could not delete greeting with id " + req.params.greetingId
-    });
-    });
 }
 }
 
-module.exports = new Greeting();
+module.exports = new GreetingModel();
