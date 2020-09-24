@@ -1,14 +1,26 @@
 const mongoose = require('mongoose');
 
 const GreetingSchema = mongoose.Schema({
-    greeting: String,
-    firstName: String,
-    lastName: String,
+    greeting: {
+        type: String,
+        min: 3,
+        required: true
+    },
+    firstName: {
+        type: String,
+        min: 3,
+        required: true
+    },
+    lastName: {
+        type: String,
+        min: 3,
+        required: true
+    },
 }, {
     timestamps: true
 });
 
-Greeting = mongoose.model("Greeting", GreetingSchema);
+var Greeting = mongoose.model("Greeting", GreetingSchema);
 
 class GreetingModel{
 
@@ -22,7 +34,6 @@ createGreeting = (data,callback) => {
         lastName: data.lastName, 
         greeting: data.greeting
     });
-
     // Save Greeting in the database
     greeting.save()
     callback(null,greeting);
@@ -35,9 +46,9 @@ createGreeting = (data,callback) => {
  * Retrieve and return all greetings from the database.
  */
 findAllGreetings = (data,callback) => {
-    Greeting.find(function(err,data) {
+    Greeting.find(data,function(err,result) {
         if(err)return callback(err,null);
-        return callback(null,data);
+        return callback(null,result);
     })
 }
 
@@ -65,8 +76,8 @@ findGreetingByName = (data,callback) => {
 /**
  * Find a single greeting with a greetingId
  */
-findOneGreeting = (data,callback) => {
-    Greeting.findById(data,function(err,data){
+findOneGreeting = (idGreeting,callback) => {
+    Greeting.findById(idGreeting,function(err,data){
         if(err)return callback(err,null);
         return callback(null,data);
     })
@@ -75,14 +86,14 @@ findOneGreeting = (data,callback) => {
 /**
  * Update a greeting identified by the greetingId in the request
  */
-updateGreeting = (data,callback) => {
+updateGreeting = (idGreeting,callback) => {
     try{
-    Greeting.findByIdAndUpdate(data, {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        greeting: data.greeting
+    Greeting.findByIdAndUpdate({_id: idGreeting.id}, {
+        firstName: idGreeting.firstName,
+        lastName: idGreeting.lastName,
+        greeting: idGreeting.greeting
     }, {new: true})
-        callback(null,data);
+        callback(null,idGreeting);
     }catch(err){
         callback(err,null);
     }
@@ -91,9 +102,9 @@ updateGreeting = (data,callback) => {
 /**
  * Delete a greeting with the specified greetingId in the request
  */
-deleteGreeting = (data,callback) => {
+deleteGreeting = (idGreeting,callback) => {
     try{
-    Greeting.findByIdAndRemove(data)
+    Greeting.findByIdAndRemove(idGreeting)
     callback(null,"Greeting deleted successfully!")
     }catch(err){
         callback(err,null);
