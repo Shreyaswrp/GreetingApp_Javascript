@@ -1,15 +1,16 @@
 const Greeting = require('../app/models/greeting.model.js');
 
+class GreetingService{
 /**
  * @params {object} data
  * @params {callback function} callback
  */
-exports.createGreeting = (data,callback) => {
-    Greeting.createGreeting(data,function(err, data) {
+createGreeting = (data,callback) => {
+    Greeting.createGreeting(data,function(err, result) {
         if (err) {
             callback(err,null);
         } else {
-            callback(null,data);
+            callback(null,result);
         }
     })
 }
@@ -18,12 +19,12 @@ exports.createGreeting = (data,callback) => {
  * @params {object} data
  * @params {callback function} callback
  */
-exports.findAllGreetings = (data,callback) => {
-    Greeting.findAllGreetings(data,function(err, data) {
+findAllGreetings = (data,callback) => {
+    Greeting.findAllGreetings(data,function(err, result) {
         if (err) {
             callback(err,null);
         } else {
-            callback(null, data);
+            callback(null, result);
         }
     })
 }
@@ -32,7 +33,7 @@ exports.findAllGreetings = (data,callback) => {
  * @params {object} data
  * @params {callback function} callback
  */
-exports.findGreetingByName = (data, callback) => {
+findGreetingByName = (data, callback) => {
     Greeting.findGreetingByName(data, (err, result) => {
         if (err) {
             callback(err)
@@ -46,7 +47,7 @@ exports.findGreetingByName = (data, callback) => {
  * @params {object} data
  * @params {callback function} callback
  */
-exports.findOneGreeting = (data, callback) => {
+findOneGreeting = (data, callback) => {
     Greeting.findOneGreeting(data, (err, result) => {
         if (err) {
             callback(err,null)
@@ -60,7 +61,7 @@ exports.findOneGreeting = (data, callback) => {
  * @params {object} data
  * @params {callback function} callback
  */
-exports.updateGreeting = (data, callback) => {
+updateGreeting = (data, callback) => {
     Greeting.updateGreeting(data, (err, result) => {
         if (err) {
             callback(err)
@@ -74,7 +75,7 @@ exports.updateGreeting = (data, callback) => {
  * @params {object} data
  * @params {callback function} callback
  */
-exports.deleteGreeting = (data, callback) => {
+deleteGreeting = (data, callback) => {
     Greeting.deleteGreeting(data, (err, result) => {
         if (err) {
             callback(err,null);
@@ -83,4 +84,6 @@ exports.deleteGreeting = (data, callback) => {
         }
     })
 }
+}
 
+module.exports = new GreetingService();
