@@ -33,26 +33,41 @@ validateMessage = (message) => {
 }
 
 /**
- * @params {object} data
- * Create and Save a new Greeting
+ * controller to past request to create service
+ * @param {httpRequest} req
+ * @param {httpresponse} res
+ * @param {callbackfunction} callback
  */
 createGreeting = (req, res) => {
 
+    var responseResult = {};
     // Validate request
     const { error } = this.validateMessage(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-    const greetingContent = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        greeting: req.body.greeting
-    }
-    greetingService.createGreeting(greetingContent, function(err, data) {
+    if (error) {
+        responseResult.success = false;
+        responseResult.message = "Could not create a greeting";
+        responseResult.error = errors;
+        res.status(422).send(responseResult)
+    }else{
+        const contentGreeting = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            greeting: req.body.greeting
+        }
+    greetingService.createGreeting(contentGreeting, function(err, data) {
         if (err) {
-            return callback(err,null);
+            responseResult.success = false;
+            responseResult.error = err;
+            responseResult.message = "Could not create a greeting";
+            res.status(422).send(responseResult);
         }else{
-            res.send(data);
+            responseResult.success = true;
+            responseResult.data = data;
+            responseResult.message = "Greeting created successfully.";
+            res.status(200).send(responseResult);
         }
     });
+    }
 }
 
 /**
@@ -61,11 +76,23 @@ createGreeting = (req, res) => {
  */
 
 findAllGreetings = (req,res) => {
-    greetingService.findAllGreetings(req.body,function(err, data) {
+    var responseResult = {};
+    const contentGreeting = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        greeting: req.body.greeting
+    }
+    greetingService.findAllGreetings(contentGreeting, function(err, data) {
         if (err) {
-            return callback(err,null);
+            responseResult.success = false;
+            responseResult.error = err;
+            responseResult.message = "Could not find greetings";
+            res.status(422).send(responseResult);
         }else{
-            res.send(data);
+            responseResult.success = true;
+            responseResult.data = data;
+            responseResult.message = "Greetings found successfully.";
+            res.status(200).send(responseResult);
         }
     });
 }
@@ -75,11 +102,23 @@ findAllGreetings = (req,res) => {
  * Retrieve and return greetings by name from the database.
  */
 findGreetingByName = (req, res) => {
-    greetingService.findGreetingByName(req.body, (err, result) => {
+    var responseResult = {};
+    const contentGreeting = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        greeting: req.body.greeting
+    }
+    greetingService.findGreetingByName(contentGreeting, (err, data) => {
         if (err) {
-            return callback(err,null);
+            responseResult.success = false;
+            responseResult.error = err;
+            responseResult.message = "Could not find greetings with the given name";
+            res.status(422).send(responseResult);
         }else{
-            res.status(200).send(result);
+            responseResult.success = true;
+            responseResult.data = data;
+            responseResult.message = "Greeting by the name found successfully.";
+            res.status(200).send(responseResult);
         }
     });
 }
@@ -89,6 +128,7 @@ findGreetingByName = (req, res) => {
  * Retrieve and return a greeting from the database.
  */
 findOneGreeting = (req, res) => {
+    var responseResult = {};
     if(!req.params.greetingId) {
         return res.status(404).send({
             message: "Greeting not found with id " + req.params.greetingId
@@ -96,13 +136,19 @@ findOneGreeting = (req, res) => {
     }
     let regexConst = new RegExp(/^[a-fA-F0-9]{24}$/);
     if(!regexConst.test(req.params.greetingId)){
-        return res.send({message: "Incorrect id.Give proper id. "});
+        return res.status(422).send({message: "Incorrect id.Give proper id. "});
     }
     greetingService.findOneGreeting(req.params.greetingId, function(err, data) {
         if (err) {
-            return callback(err,null);
+            responseResult.success = false;
+            responseResult.error = err;
+            responseResult.message = "Could not find greetings with the given id";
+            res.status(422).send(responseResult);   
         }else{
-            res.status(200).send(data);
+            responseResult.success = true;
+            responseResult.data = data;
+            responseResult.message = "Greeting by the id provided found successfully.";
+            res.status(200).send(responseResult);
         }
     });
 }
@@ -112,6 +158,7 @@ findOneGreeting = (req, res) => {
  * Update greetings from the database.
  */
 updateGreeting = (req, res) => {
+    var responseResult = {};
     if(!req.params.greetingId) {
         return res.status(404).send({
             message: "Greeting not found with id " + req.params.greetingId
@@ -119,19 +166,25 @@ updateGreeting = (req, res) => {
     }
     let regexConst = new RegExp(/^[a-fA-F0-9]{24}$/);
     if(!regexConst.test(req.params.greetingId)){
-        return res.send({message: "Incorrect id.Give proper id. "});
+        return res.status(422).send({message: "Incorrect id.Give proper id. "});
     }
-    const greetingToUpdate ={
-        id: req.params.greetingId,
+    const greetingToUpdate = {
+        _id: req.params.greetingId,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         greeting: req.body.greeting
     }
-    greetingService.updateGreeting(greetingToUpdate, function(err, result) {
+    greetingService.updateGreeting(greetingToUpdate, function(err, data) {
         if (err) {
-            return callback(err,null);
+            responseResult.success = false;
+            responseResult.error = err;
+            responseResult.message = "Could not update greeting with the given id";
+            res.status(422).send(responseResult); 
         }else{
-            res.status(200).send(result);
+            responseResult.success = true;
+            responseResult.data = data;
+            responseResult.message = "Greeting updated successfully.";
+            res.status(200).send(responseResult);
         }
     });
 }
@@ -141,20 +194,25 @@ updateGreeting = (req, res) => {
  * Delete greetings from the database.
  */
 deleteGreeting = (req, res) => {
+    var responseResult = {};
     if(!req.params.greetingId) {
-        return res.status(404).send({
-            message: "Greeting not found with id " + req.params.greetingId
-        });
+        return res.send({message: "Greeting not found with the given id. "});
     }
     let regexConst = new RegExp(/^[a-fA-F0-9]{24}$/);
     if(!regexConst.test(req.params.greetingId)){
         return res.send({message: "Incorrect id.Give proper id. "});
     }
-    greetingService.deleteGreeting(req.params.greetingId, function(err, result) {
+    greetingService.deleteGreeting(req.params.greetingId, function(err, data) {
         if (err) {
-            return callback(err,null);
+            responseResult.success = false;
+            responseResult.error = err;
+            responseResult.message = "Could not update greeting with the given id";
+            res.status(422).send(responseResult);
         }else{
-            res.status(200).send(result);
+            responseResult.success = true;
+            responseResult.data = data;
+            responseResult.message = "Greeting deleted ";
+            res.status(200).send(responseResult);
         }
     });
 }
