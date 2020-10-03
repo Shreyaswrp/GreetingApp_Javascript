@@ -86,26 +86,28 @@ findOneGreeting = (idGreeting,callback) => {
 /**
  * Update a greeting identified by the greetingId in the request
  */
-updateGreeting = (idGreeting,callback) => {
+updateGreeting = (id, data, callback) => {
     try{
-    Greeting.findByIdAndUpdate({_id: idGreeting.id}, {
-        firstName: idGreeting.firstName,
-        lastName: idGreeting.lastName,
-        greeting: idGreeting.greeting
-    }, {new: true})
-        callback(null,idGreeting);
-    }catch(err){
-        callback(err,null);
+    Greeting.findByIdAndUpdate(id, data, function (err, post){
+    if (err) return next(err);
+    callback(null, data);
+    })
     }
+    catch(err) {
+    callback(err,null);
+    }    
 }
+
 
 /**
  * Delete a greeting with the specified greetingId in the request
  */
 deleteGreeting = (idGreeting,callback) => {
     try{
-    Greeting.findByIdAndRemove(idGreeting)
-    callback(null,"Greeting deleted successfully!")
+    Greeting.findByIdAndDelete(idGreeting)
+    .then(
+    callback(null,"Greeting deleted successfully!"))
+    .catch(callback(err,null))
     }catch(err){
         callback(err,null);
     }

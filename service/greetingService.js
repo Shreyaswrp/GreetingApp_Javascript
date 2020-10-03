@@ -61,10 +61,10 @@ findOneGreeting = (data, callback) => {
  * @params {object} data
  * @params {callback function} callback
  */
-updateGreeting = (data, callback) => {
-    Greeting.updateGreeting(data, (err, result) => {
+updateGreeting = (id, data, callback) => {
+    Greeting.updateGreeting(id, data, (err, result) => {
         if (err) {
-            callback(err)
+            callback(err,null);
         } else {
             callback(null, result);
         }

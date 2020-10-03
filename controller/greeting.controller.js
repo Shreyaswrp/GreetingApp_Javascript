@@ -77,12 +77,7 @@ createGreeting = (req, res) => {
 
 findAllGreetings = (req,res) => {
     var responseResult = {};
-    const contentGreeting = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        greeting: req.body.greeting
-    }
-    greetingService.findAllGreetings(contentGreeting, function(err, data) {
+    greetingService.findAllGreetings(req.body, function(err, data) {
         if (err) {
             responseResult.success = false;
             responseResult.error = err;
@@ -168,13 +163,13 @@ updateGreeting = (req, res) => {
     if(!regexConst.test(req.params.greetingId)){
         return res.status(422).send({message: "Incorrect id.Give proper id. "});
     }
-    const greetingToUpdate = {
+    /*const greetingToUpdate = {
         _id: req.params.greetingId,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         greeting: req.body.greeting
-    }
-    greetingService.updateGreeting(greetingToUpdate, function(err, data) {
+    }*/
+    greetingService.updateGreeting(req.params.greetingId, req.body, function(err, data) {
         if (err) {
             responseResult.success = false;
             responseResult.error = err;
